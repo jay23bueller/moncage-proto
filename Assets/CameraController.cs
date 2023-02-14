@@ -14,9 +14,7 @@ public class CameraController : MonoBehaviour
     private float _mouseXSensitivity = 60f;
     [SerializeField]
     private Camera _camera;
-    private bool _enableYRotation = false;
-    private bool _enableXRotation = false;
-
+    private bool _enableRotation = false;
 
     private void Start()
     {
@@ -27,7 +25,7 @@ public class CameraController : MonoBehaviour
     {
 
         HandleZoom();
-        HandleMovement();
+        HandleMovementAndRotation();
     }
 
     private void SetLookAtTarget()
@@ -36,35 +34,27 @@ public class CameraController : MonoBehaviour
     }
 
 
-    private void HandleMovement()
+    private void HandleMovementAndRotation()
     {
         if (Input.GetMouseButtonDown(0))
-            _enableYRotation = true;
+            _enableRotation = true;
 
         if(Input.GetMouseButtonUp(0))
-            _enableYRotation = false;
+            _enableRotation = false;
 
 
-        if (Input.GetMouseButtonDown(1))
-            _enableXRotation = true;
-
-        if (Input.GetMouseButtonUp(1))
-            _enableXRotation = false;
-
-        if (_enableYRotation)
+        if (_enableRotation)
         {
             
             float mouseXDeltaSpeed = Input.GetAxis("Mouse X") * _mouseYSensitivity * Time.deltaTime;
 
             transform.RotateAround(_targetTransform.position + Vector3.up * (transform.position.y - _targetTransform.position.y), Vector3.up, mouseXDeltaSpeed);
 
-
-
-        } else if(_enableXRotation)
-        {
             float mouseYDeltaSpeed = -Input.GetAxis("Mouse Y") * _mouseYSensitivity * Time.deltaTime;
             Debug.Log(Input.GetAxis("Mouse X"));
             transform.RotateAround(_targetTransform.position, transform.right, mouseYDeltaSpeed);
+
+
         }
 
     }
