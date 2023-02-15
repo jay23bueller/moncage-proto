@@ -14,8 +14,6 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float _mouseXSensitivity = 60f;
     [SerializeField]
-    private Camera _camera;
-    [SerializeField]
     private Camera[] _secondaryCameras;
     private bool _enableRotation = false;
 
@@ -36,7 +34,6 @@ public class CameraController : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(1))
         {
-            Vector2 mousePosition = Input.mousePosition;
             Ray mouseInputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
            
             RaycastHit hit;
@@ -44,22 +41,21 @@ public class CameraController : MonoBehaviour
 
             if(hit.collider != null)
             {
-                Vector3 normalInverted = -hit.normal;
                 RaycastHit secondHit = new RaycastHit();
                 Debug.DrawLine(transform.position, hit.point, Color.red, 4f);
                 if (hit.collider.CompareTag("FirstView"))
                 {
-                    HitThroughCamera(0,hit,normalInverted,ref secondHit, mouseInputRay);
+                    HitThroughCamera(0, hit, ref secondHit);
                 }
 
                 if(hit.collider.CompareTag("SecondView"))
                 {
-                    HitThroughCamera(1, hit, normalInverted, ref secondHit, mouseInputRay);
+                    HitThroughCamera(1, hit, ref secondHit);
                 }
 
                 if(hit.collider.CompareTag("ThirdView"))
                 {
-                    HitThroughCamera(2, hit, normalInverted, ref secondHit, mouseInputRay);
+                    HitThroughCamera(2, hit, ref secondHit);
                 }
 
                 if(secondHit.collider != null)
@@ -71,7 +67,7 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    private void HitThroughCamera(int cameraId, RaycastHit hit, Vector3 invertedNormal, ref RaycastHit secondHit, Ray mouseInputRay)
+    private void HitThroughCamera(int cameraId, RaycastHit hit, ref RaycastHit secondHit)
     {
         Ray mouseC = _secondaryCameras[cameraId].ViewportPointToRay(hit.textureCoord);
         
@@ -87,7 +83,7 @@ public class CameraController : MonoBehaviour
 
     private void SetLookAtTarget()
     {
-        _camera.transform.LookAt(_targetTransform);
+        transform.LookAt(_targetTransform);
     }
 
 
